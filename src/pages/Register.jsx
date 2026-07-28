@@ -11,7 +11,7 @@ const Register = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Correct function name
+  
   const { register, verifyOTP } = useContext(AuthContext);
 
   const navigate = useNavigate();
