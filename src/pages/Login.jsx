@@ -11,7 +11,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const { login, verifyOTP } = useContext(AuthContext);
-  const navigate = useNavigaate();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,16 +27,24 @@ const Login = () => {
         if (data.role === "admin") navigate("/admin");
         else navigate("/dashboard");
       }
-    } catch (error) {
-      if (error.needsVerification) {
-        setShowOTP(true);
-        setError(
-          "Account not verified. A new OTP has been sent to your email.",
-        );
-      } else {
-        setError(error.message || error);
-      }
-    } finally {
+    } 
+    
+    catch (error) {
+
+  if (error.response?.data?.needsVerification) {
+    setShowOTP(true);
+    setError(
+      "Account not verified. A new OTP has been sent to your email."
+    );
+  } else {
+    setError(
+      error.response?.data?.message || error.message
+    );
+  }
+
+}
+    
+    finally {
       setLoading(false);
     }
   };
