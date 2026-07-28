@@ -21,7 +21,7 @@ const ForgotPassword = () => {
         state:{email}
        })
         } catch (error) {
-            setError(error.respose?.data?.message||"Something went wrong")
+            setError(error.response?.data?.message||"Something went wrong")
         }
         finally{
             setLoading(false)

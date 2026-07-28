@@ -11,7 +11,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const { login, verifyOTP } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const navigate = useNavigaate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
