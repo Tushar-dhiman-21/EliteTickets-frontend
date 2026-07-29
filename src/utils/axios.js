@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: "https://elitetickets-backend.onrender.com"
+    baseURL: "https://elite-tickets-backend.vercel.app/"
 });
 
 api.interceptors.request.use((config) => {
