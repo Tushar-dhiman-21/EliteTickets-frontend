@@ -83,15 +83,16 @@ const AdminDashboard = () => {
 
   const handleUpdateBookingStatus = async (id, status, paymentStatus) => {
     try {
-      await api.put("/bookings/${id}/status", {
+      await api.put(`/bookings/${id}/status`, {
         status,
         paymentStatus,
       });
 
       fetchData();
     } catch (error) {
-      toast.error(error.response?.data?.message || "Error updating booking");
-    }
+    console.log(error);
+    toast.error(error.response?.data?.message || "Error updating booking");
+}
   };
 
   const handleCancelBooking = async (id) => {
