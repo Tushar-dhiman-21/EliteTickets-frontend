@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import api from "../utils/axios";
+import { toast } from "react-toastify";
 
 const ResetPassword = () => {
 const location=useLocation();
@@ -30,7 +31,7 @@ try {
         otp,
         newPassword
     })
-    alert(data.message);
+    toast.error(data.message);
     navigate("/login")
 } catch (error) {
     setError(error.response?.data?.message||"Something went wrong")

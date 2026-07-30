@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../utils/axios";
+import { toast } from "react-toastify";
 
 
 const ForgotPassword = () => {
@@ -16,7 +17,8 @@ const ForgotPassword = () => {
 
         try {
             const {data}=await api.post("/auth/forgot-password",{email})
-       alert(data.message);
+       
+toast.warning(data.message);
        navigate("/reset-password",{
         state:{email}
        })
