@@ -83,7 +83,7 @@ const AdminDashboard = () => {
 
   const handleUpdateBookingStatus = async (id, status, paymentStatus) => {
     try {
-      await api.put(`/booking/${id}/status`, {
+      await api.put("/bookings/${id}/status", {
         status,
         paymentStatus,
       });
