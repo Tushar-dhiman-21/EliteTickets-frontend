@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: "https://elite-tickets-backend.vercel.app",
+  baseURL: "https://elite-tickets-backend.vercel.app/api",
 });
 
 
