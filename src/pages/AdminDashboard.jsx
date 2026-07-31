@@ -167,7 +167,7 @@ const AdminDashboard = () => {
                       (b) =>
                         b.paymentStatus === "paid" && b.status === "confirmed",
                     )
-                    .map((b) => b.userId?._id),
+                    .map((b) => b.userId?._id), 
                 ).size
               }
             </h3>
@@ -447,7 +447,7 @@ const AdminDashboard = () => {
         handleUpdateBookingStatus(
           booking._id,
           "confirmed",
-          "not-paid"
+          "not_paid"
         )
       }
       className="flex-1 min-w-[120px] bg-gray-50 text-gray-700 hover:bg-gray-800 hover:text-white border border-gray-200 text-xs font-bold py-2.5 px-3 rounded-lg shadow-sm transition"
