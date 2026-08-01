@@ -56,13 +56,21 @@
           setSuccessMsg(data.message);
         } else {
           const { data } = await api.post("/bookings", {
-            eventId: event._id,
-            otp,
-          });
+  eventId: event._id,
+  otp,
+});
 
-          setSuccessMsg(data.message);
-          setShowOTP(false);
-          setOtp("");
+setShowOTP(false);
+setOtp("");
+
+// If event is free, no payment required
+if (event.ticketPrice === 0) {
+  setSuccessMsg(data.message);
+} else {
+  navigate(`/payment/${data.booking._id}`);
+}
+
+
         }
       } catch (err) {
         setError(err.response?.data?.error || "Booking failed");

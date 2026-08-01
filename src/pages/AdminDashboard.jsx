@@ -90,9 +90,9 @@ const AdminDashboard = () => {
 
       fetchData();
     } catch (error) {
-    console.log(error);
-    toast.error(error.response?.data?.message || "Error updating booking");
-}
+      console.log(error);
+      toast.error(error.response?.data?.message || "Error updating booking");
+    }
   };
 
   if (loading)
@@ -156,7 +156,7 @@ const AdminDashboard = () => {
                       (b) =>
                         b.paymentStatus === "paid" && b.status === "confirmed",
                     )
-                    .map((b) => b.userId?._id), 
+                    .map((b) => b.userId?._id),
                 ).size
               }
             </h3>
@@ -382,16 +382,39 @@ const AdminDashboard = () => {
                           ({booking.userId?.email})
                         </span>
                       </p>
+
                       <p className="text-gray-700 flex items-center gap-2 mb-1">
                         <span className="font-bold w-16 text-gray-500 uppercase text-xs">
                           Amount:
                         </span>
                         <span
-                          className={`font-semibold ${booking.amount === 0 ? "text-green-600" : ""}`}
+                          className={`font-semibold ${
+                            booking.amount === 0 ? "text-green-600" : ""
+                          }`}
                         >
                           {booking.amount === 0 ? "Free" : `₹${booking.amount}`}
                         </span>
                       </p>
+
+                      {/* Transaction ID */}
+                      <p className="text-gray-700 flex items-center gap-2 mb-1">
+                        <span className="font-bold w-16 text-gray-500 uppercase text-xs">
+                          UTR:
+                        </span>
+                        <span className="font-semibold">
+                          {booking.transactionId || "Not Submitted"}
+                        </span>
+                      </p>
+
+                      <p className="text-gray-700 flex items-center gap-2 mb-1">
+                        <span className="font-bold w-16 text-gray-500 uppercase text-xs">
+                          Date:
+                        </span>
+                        <span>
+                          {new Date(booking.bookedAt).toLocaleString()}
+                        </span>
+                      </p>
+
                       <p className="text-gray-700 flex items-center gap-2 mb-1">
                         <span className="font-bold w-16 text-gray-500 uppercase text-xs">
                           Date:
@@ -416,47 +439,44 @@ const AdminDashboard = () => {
                     </div>
 
                     {/* Action buttons for admin */}
-                   {booking.status === "pending" && (
-  <div className="flex flex-wrap gap-2 mt-2">
-    <button
-      onClick={() =>
-        handleUpdateBookingStatus(
-          booking._id,
-          "confirmed",
-          "paid"
-        )
-      }
-      className="flex-1 min-w-30 bg-green-50 text-green-700 hover:bg-green-600 hover:text-white border border-green-200 text-xs font-bold py-2.5 px-3 rounded-lg shadow-sm transition"
-    >
-      ✓ Approve as Paid
-    </button>
+                    {booking.status === "pending" && (
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        <button
+                          onClick={() =>
+                            handleUpdateBookingStatus(
+                              booking._id,
+                              "confirmed",
+                              "paid",
+                            )
+                          }
+                          className="flex-1 min-w-30 bg-green-50 text-green-700 hover:bg-green-600 hover:text-white border border-green-200 text-xs font-bold py-2.5 px-3 rounded-lg shadow-sm transition"
+                        >
+                          ✓ Approve as Paid
+                        </button>
 
-    <button
-      onClick={() =>
-        handleUpdateBookingStatus(
-          booking._id,
-          "confirmed",
-          "not_paid"
-        )
-      }
-      className="flex-1 min-w-30 bg-gray-50 text-gray-700 hover:bg-gray-800 hover:text-white border border-gray-200 text-xs font-bold py-2.5 px-3 rounded-lg shadow-sm transition"
-    >
-      ✓ Approve Unpaid
-    </button>
+                        <button
+                          onClick={() =>
+                            handleUpdateBookingStatus(
+                              booking._id,
+                              "confirmed",
+                              "not_paid",
+                            )
+                          }
+                          className="flex-1 min-w-30 bg-gray-50 text-gray-700 hover:bg-gray-800 hover:text-white border border-gray-200 text-xs font-bold py-2.5 px-3 rounded-lg shadow-sm transition"
+                        >
+                          ✓ Approve Unpaid
+                        </button>
 
-    <button
-      onClick={() =>
-        handleUpdateBookingStatus(
-          booking._id,
-          "cancelled"
-        )
-      }
-      className="w-20 bg-red-50 text-red-600 hover:bg-red-500 hover:text-white border border-red-200 text-xs font-bold py-2.5 px-3 rounded-lg transition"
-    >
-      ✕ Reject
-    </button>
-  </div>
-)}
+                        <button
+                          onClick={() =>
+                            handleUpdateBookingStatus(booking._id, "cancelled")
+                          }
+                          className="w-20 bg-red-50 text-red-600 hover:bg-red-500 hover:text-white border border-red-200 text-xs font-bold py-2.5 px-3 rounded-lg transition"
+                        >
+                          ✕ Reject
+                        </button>
+                      </div>
+                    )}
                   </li>
                 ))
               )}

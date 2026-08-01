@@ -11,7 +11,7 @@ import PaymentSuccess from "./pages/PaymentSucess";
 import UserDashboard from "./pages/UserDashboard";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
-
+import Payment from "./pages/Payment";
 
 function App() {
     return (
@@ -30,7 +30,7 @@ function App() {
                         <Route path="/payment-failed" element={<PaymentFailed />} />
                         <Route path="/forgot-password" element={<ForgotPassword />} />
                         <Route path="/reset-password" element={<ResetPassword />} />
-
+                        <Route path="/payment/:id" element={<Payment />} />
                         <Route path="*" element={<h1 className="text-3xl font-bold text-center mt-20">404 - Page Not Found</h1>} />
                     </Routes>
                 </main>
