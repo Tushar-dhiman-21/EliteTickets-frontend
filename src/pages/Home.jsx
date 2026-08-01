@@ -10,32 +10,32 @@ const Home = () => {
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            fetchEvents();
+            const loadEvents = async () => {
+                try {
+                    const { data } = await api.get(`/events?search=${search}`);
+                    setEvents(data);
+                } catch (error) {
+                    console.error('Error fetching events:', error);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            loadEvents();
         }, 400); // 400ms debounce
         return () => clearTimeout(timeoutId);
     }, [search]);
-
-    const fetchEvents = async () => {
-        try {
-            const { data } = await api.get(`/events?search=${search}`);
-            setEvents(data);
-        } catch (error) {
-            console.error('Error fetching events:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     return (
         <div className="flex flex-col min-h-screen">
             {/* Hero Section */}
             <div className="relative bg-black text-white rounded-3xl overflow-hidden mb-12 shadow-2xl">
                 <div className="absolute inset-0 opacity-40 bg-[url('https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=3000&auto=format&fit=crop')] bg-cover bg-center"></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+                <div className="absolute inset-0 bg-linear-to-t from-black via-black/80 to-transparent"></div>
                 <div className="relative p-10 md:p-20 text-center flex flex-col items-center z-10">
                     <span className="bg-white/20 text-white backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-6 border border-white/20">Welcome to Eventora</span>
                     <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight tracking-tight drop-shadow-lg">
-                        Find Your Next <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500">Unforgettable</span> Experience
+                        Find Your Next <br /><span className="text-transparent bg-clip-text bg-linear-to-r from-gray-200 to-gray-500">Unforgettable</span> Experience
                     </h1>
                     <p className="text-gray-300 text-lg md:text-xl mb-10 max-w-2xl mx-auto font-light leading-relaxed">
                         Discover the best tech conferences, late-night music festivals, and hands-on workshops happening directly in your area. Secure your spot today.
@@ -104,7 +104,7 @@ const Home = () => {
                                     {event.ticketPrice === 0 ? <span className="text-green-600">FREE</span> : <span className="text-gray-900">₹{event.ticketPrice}</span>}
                                 </div>
                             </div>
-                            <div className="p-6 flex-grow flex flex-col">
+                            <div className="p-6 grow flex flex-col">
                                 <div className="text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">{event.category}</div>
                                 <h2 className="text-xl font-bold text-gray-800 mb-3">{event.title}</h2>
                                 <div className="flex flex-col gap-2 mb-4 text-gray-600 text-sm">
