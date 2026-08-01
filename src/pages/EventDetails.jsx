@@ -55,7 +55,7 @@
           setShowOTP(true);
           setSuccessMsg(data.message);
         } else {
-          const { data } = await api.post("/bookings", {
+         const { data } = await api.post("/bookings", {
   eventId: event._id,
   otp,
 });
@@ -63,10 +63,12 @@
 setShowOTP(false);
 setOtp("");
 
-// If event is free, no payment required
-if (event.ticketPrice === 0) {
-  setSuccessMsg(data.message);
+if (data.booking.status === "confirmed") {
+  // Free event
+  setSuccessMsg("Booking confirmed successfully!");
+
 } else {
+  // Paid event
   navigate(`/payment/${data.booking._id}`);
 }
 

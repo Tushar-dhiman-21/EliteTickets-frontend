@@ -108,7 +108,7 @@ const [message, setMessage] = useState("");
 
     <button
       onClick={() => {
-        navigator.clipboard.writeText("yourupi@okaxis");
+        navigator.clipboard.writeText("tushardhiman2011@okaxis");
         alert("UPI ID copied!");
       }}
       className="bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700"
@@ -132,13 +132,18 @@ const [message, setMessage] = useState("");
     className="w-full border rounded-lg p-3"
   />
 </div>
-
 <button
   onClick={handleSubmitPayment}
-  disabled={submitting}
+  disabled={
+    submitting || booking.paymentStatus === "verification_pending"
+  }
   className="w-full bg-green-600 text-white py-3 rounded-lg mt-6 hover:bg-green-700 disabled:bg-gray-400"
 >
-  {submitting ? "Submitting..." : "Submit Payment"}
+  {booking.paymentStatus === "verification_pending"
+    ? "Payment Verification Pending"
+    : submitting
+    ? "Submitting..."
+    : "Submit Payment"}
 </button>
 {message && (
   <p className="text-center text-green-600 mt-4">

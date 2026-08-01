@@ -415,14 +415,7 @@ const AdminDashboard = () => {
                         </span>
                       </p>
 
-                      <p className="text-gray-700 flex items-center gap-2 mb-1">
-                        <span className="font-bold w-16 text-gray-500 uppercase text-xs">
-                          Date:
-                        </span>
-                        <span>
-                          {new Date(booking.bookedAt).toLocaleString()}
-                        </span>
-                      </p>
+                   
                       {booking.eventId && (
                         <p className="text-gray-700 flex items-center gap-2 mt-2 pt-2 border-t border-gray-200">
                           <span className="font-bold w-16 text-gray-500 uppercase text-xs">
@@ -439,44 +432,53 @@ const AdminDashboard = () => {
                     </div>
 
                     {/* Action buttons for admin */}
-                    {booking.status === "pending" && (
-                      <div className="flex flex-wrap gap-2 mt-2">
-                        <button
-                          onClick={() =>
-                            handleUpdateBookingStatus(
-                              booking._id,
-                              "confirmed",
-                              "paid",
-                            )
-                          }
-                          className="flex-1 min-w-30 bg-green-50 text-green-700 hover:bg-green-600 hover:text-white border border-green-200 text-xs font-bold py-2.5 px-3 rounded-lg shadow-sm transition"
-                        >
-                          ✓ Approve as Paid
-                        </button>
+                      {booking.status === "cancelled" && (
+  <div className="flex flex-wrap gap-2 mt-2">
 
-                        <button
-                          onClick={() =>
-                            handleUpdateBookingStatus(
-                              booking._id,
-                              "confirmed",
-                              "not_paid",
-                            )
-                          }
-                          className="flex-1 min-w-30 bg-gray-50 text-gray-700 hover:bg-gray-800 hover:text-white border border-gray-200 text-xs font-bold py-2.5 px-3 rounded-lg shadow-sm transition"
-                        >
-                          ✓ Approve Unpaid
-                        </button>
+    {booking.paymentStatus === "verification_pending" && (
+      <button
+        onClick={() =>
+          handleUpdateBookingStatus(
+            booking._id,
+            "confirmed",
+            "paid"
+          )
+        }
+        className="flex-1 bg-green-50 text-green-700 hover:bg-green-600 hover:text-white border border-green-200 text-xs font-bold py-2.5 px-3 rounded-lg"
+      >
+        ✓ Verify Payment
+      </button>
+    )}
 
-                        <button
-                          onClick={() =>
-                            handleUpdateBookingStatus(booking._id, "cancelled")
-                          }
-                          className="w-20 bg-red-50 text-red-600 hover:bg-red-500 hover:text-white border border-red-200 text-xs font-bold py-2.5 px-3 rounded-lg transition"
-                        >
-                          ✕ Reject
-                        </button>
-                      </div>
-                    )}
+    {booking.amount === 0 && (
+      <button
+        onClick={() =>
+          handleUpdateBookingStatus(
+            booking._id,
+            "confirmed",
+            "paid"
+          )
+        }
+        className="flex-1 bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white border border-blue-200 text-xs font-bold py-2.5 px-3 rounded-lg"
+      >
+        ✓ Confirm Free Booking
+      </button>
+    )}
+
+    <button
+      onClick={() =>
+        handleUpdateBookingStatus(
+          booking._id,
+          "cancelled"
+        )
+      }
+      className="w-20 bg-red-50 text-red-600 hover:bg-red-500 hover:text-white border border-red-200 text-xs font-bold py-2.5 px-3 rounded-lg"
+    >
+      ✕ Reject
+    </button>
+
+  </div>
+)}
                   </li>
                 ))
               )}
