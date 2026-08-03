@@ -2,12 +2,21 @@ import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import api from "../utils/axios";
 import { Link, useNavigate } from "react-router-dom";
-import { FaTicketAlt, FaTimesCircle, FaArrowRight } from "react-icons/fa";
+import { FaTicketAlt, FaTimesCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
 
+/* ---------------------------------------------------------
+   Design notes:
+   - Palette: near-black bg #0B0E14, glass cards
+     (translucent white + blur), gradient accent cyan→violet
+     (#22D3EE → #8B5CF6), status glows: emerald/amber/rose
+   - Display face: Sora (headings) / Body: Inter, tabular nums
+   - Signature element: glass cards with a soft gradient glow
+     ring, a monogram avatar per event, and status shown as a
+     glowing dot + label rather than a solid pill.
+   --------------------------------------------------------- */
 
-
-const FONT_IMPORT_ID = "user-dashboard-fonts-v2";
+const FONT_IMPORT_ID = "user-dashboard-fonts-v3";
 
 const useDashboardFonts = () => {
   useEffect(() => {
@@ -16,16 +25,29 @@ const useDashboardFonts = () => {
     link.id = FONT_IMPORT_ID;
     link.rel = "stylesheet";
     link.href =
-      "https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap";
+      "https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap";
     document.head.appendChild(link);
   }, []);
 };
 
-const STATUS_COLORS = {
-  confirmed: "#2F7D6B",
-  cancelled: "#B5493F",
-  pending: "#C08A2E",
+const STATUS = {
+  confirmed: { glow: "#34D399", label: "Confirmed" },
+  cancelled: { glow: "#FB7185", label: "Cancelled" },
+  pending: { glow: "#FBBF24", label: "Pending" },
 };
+
+const GlowDot = ({ color }) => (
+  <span className="relative inline-flex w-2 h-2">
+    <span
+      className="absolute inline-flex w-full h-full rounded-full opacity-60 animate-ping"
+      style={{ backgroundColor: color }}
+    />
+    <span
+      className="relative inline-flex w-2 h-2 rounded-full"
+      style={{ backgroundColor: color }}
+    />
+  </span>
+);
 
 const UserDashboard = () => {
   const { user } = useContext(AuthContext);
@@ -82,203 +104,237 @@ const UserDashboard = () => {
     }
   };
 
-  const confirmedCount = bookings.filter((b) => b.status === "confirmed").length;
-  const activeCount = bookings.filter((b) => b.status !== "cancelled").length;
-
   if (loading) {
     return (
       <div
-        className="text-center py-24 text-lg"
-        style={{ fontFamily: "'Inter', sans-serif", color: "#23262B" }}
+        className="min-h-[50vh] flex flex-col items-center justify-center text-lg"
+        style={{ backgroundColor: "#0B0E14", color: "#E5E7EB", fontFamily: "'Inter', sans-serif" }}
       >
         <div
-          className="w-8 h-8 mx-auto mb-4 rounded-full border-2 border-t-transparent animate-spin"
-          style={{ borderColor: "#2F7D6B transparent #2F7D6B #2F7D6B" }}
+          className="w-9 h-9 mb-4 rounded-full border-2 border-t-transparent animate-spin"
+          style={{ borderColor: "#8B5CF6 transparent #22D3EE #8B5CF6" }}
         />
-        Fetching your reservations…
+        Loading dashboard…
       </div>
     );
   }
 
   return (
     <div
-      className="max-w-5xl mx-auto px-4"
-      style={{ fontFamily: "'Inter', sans-serif", color: "#23262B" }}
+      className="max-w-6xl mx-auto px-4 py-6 rounded-3xl"
+      style={{ backgroundColor: "#0B0E14", color: "#E5E7EB", fontFamily: "'Inter', sans-serif" }}
     >
-      {/* Profile Bar */}
+      {/* Profile Card */}
       <div
-        className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 py-8 mb-8 border-b-2"
-        style={{ borderColor: "#23262B" }}
+        className="relative rounded-2xl p-6 sm:p-8 mb-8 flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 sm:gap-6 overflow-hidden"
+        style={{
+          backgroundColor: "rgba(255,255,255,0.04)",
+          border: "1px solid rgba(255,255,255,0.08)",
+          backdropFilter: "blur(12px)",
+        }}
       >
-        <div className="flex items-center gap-4">
-          <div
-            className="w-14 h-14 rounded-full flex items-center justify-center text-xl font-bold uppercase"
-            style={{ backgroundColor: "#23262B", color: "#F7F5F2" }}
-          >
-            {user?.name?.charAt(0).toUpperCase()}
-          </div>
-          <div>
-            <h1
-              className="text-2xl sm:text-3xl font-extrabold leading-tight"
-              style={{ fontFamily: "'Manrope', sans-serif" }}
-            >
-              {user?.name}
-            </h1>
-            <p className="text-sm text-gray-500">Your reservation history</p>
-          </div>
+        <div
+          className="absolute -top-24 -right-24 w-56 h-56 rounded-full opacity-20 blur-3xl"
+          style={{ background: "linear-gradient(135deg, #22D3EE, #8B5CF6)" }}
+        />
+        <div
+          className="relative w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold uppercase tracking-widest shrink-0"
+          style={{
+            background: "linear-gradient(135deg, #22D3EE, #8B5CF6)",
+            color: "#0B0E14",
+          }}
+        >
+          {user?.name?.charAt(0).toUpperCase()}
         </div>
 
-        <div className="flex gap-8" style={{ fontFamily: "'Space Mono', monospace" }}>
-          <div>
-            <div className="text-2xl font-bold" style={{ color: "#2F7D6B" }}>
-              {confirmedCount}
-            </div>
-            <div className="text-[11px] uppercase tracking-wider text-gray-500">
-              Confirmed
-            </div>
-          </div>
-          <div>
-            <div className="text-2xl font-bold">{activeCount}</div>
-            <div className="text-[11px] uppercase tracking-wider text-gray-500">
-              Active
-            </div>
-          </div>
-          <div>
-            <div className="text-2xl font-bold text-gray-400">
-              {bookings.length}
-            </div>
-            <div className="text-[11px] uppercase tracking-wider text-gray-500">
-              Total
-            </div>
-          </div>
+        <div className="relative">
+          <h1
+            className="text-2xl sm:text-3xl font-bold mb-2"
+            style={{ fontFamily: "'Sora', sans-serif" }}
+          >
+            Welcome, {user?.name}!
+          </h1>
+
+          <p className="flex items-center justify-center sm:justify-start gap-2 text-sm" style={{ color: "#9CA3AF" }}>
+            <GlowDot color="#34D399" />
+            User Dashboard
+          </p>
         </div>
       </div>
 
       {/* Heading */}
-      <div className="flex items-center gap-3 mb-5">
-        <FaTicketAlt style={{ color: "#2F7D6B" }} />
+      <div className="flex items-center justify-between mb-6">
         <h2
-          className="text-lg font-bold uppercase tracking-wide"
-          style={{ fontFamily: "'Manrope', sans-serif" }}
+          className="text-xl sm:text-2xl font-bold flex items-center gap-3"
+          style={{ fontFamily: "'Sora', sans-serif" }}
         >
-          Booking Requests
+          <FaTicketAlt style={{ color: "#8B5CF6" }} />
+          My Booking Requests
         </h2>
       </div>
 
       {/* No Bookings */}
       {bookings.length === 0 ? (
         <div
-          className="py-20 text-center border-t border-b"
-          style={{ borderColor: "#E3E1DA" }}
+          className="rounded-2xl p-12 text-center"
+          style={{
+            backgroundColor: "rgba(255,255,255,0.03)",
+            border: "1px dashed rgba(255,255,255,0.15)",
+          }}
         >
-          <p className="text-lg mb-6 text-gray-500">
+          <div
+            className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4"
+            style={{ backgroundColor: "rgba(255,255,255,0.05)" }}
+          >
+            <FaTicketAlt className="text-3xl" style={{ color: "#4B5563" }} />
+          </div>
+
+          <p className="text-xl mb-6" style={{ color: "#9CA3AF" }}>
             You haven't booked any events yet.
           </p>
+
           <Link
             to="/"
-            className="inline-flex items-center gap-2 font-bold py-3 px-8 rounded-full transition hover:opacity-90"
-            style={{ backgroundColor: "#23262B", color: "#F7F5F2" }}
+            className="inline-block font-bold py-3 px-8 rounded-xl transition hover:opacity-90"
+            style={{
+              background: "linear-gradient(135deg, #22D3EE, #8B5CF6)",
+              color: "#0B0E14",
+            }}
           >
-            Browse Events <FaArrowRight className="text-xs" />
+            Browse Events
           </Link>
         </div>
       ) : (
-        <div className="flex flex-col divide-y" style={{ borderColor: "#E3E1DA" }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {bookings.map((booking) => {
-            const railColor = STATUS_COLORS[booking.status] || STATUS_COLORS.pending;
+            const s = STATUS[booking.status] || STATUS.pending;
 
             return (
               <div
                 key={booking._id}
-                className="flex items-stretch gap-5 py-5"
-                style={{ borderColor: "#E3E1DA" }}
+                className="group relative rounded-2xl overflow-hidden flex flex-col transition-transform hover:-translate-y-1"
+                style={{
+                  backgroundColor: "rgba(255,255,255,0.04)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  backdropFilter: "blur(12px)",
+                }}
               >
-                {/* Status rail */}
                 <div
-                  className="w-1 rounded-full shrink-0"
-                  style={{ backgroundColor: railColor }}
+                  className="absolute inset-x-0 top-0 h-0.5 opacity-70"
+                  style={{ background: `linear-gradient(90deg, ${s.glow}, transparent)` }}
                 />
 
-                {booking.eventId ? (
-                  <div className="flex-1 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3
-                          className="text-base font-bold truncate"
-                          style={{ fontFamily: "'Manrope', sans-serif" }}
-                        >
-                          {booking.eventId.title}
-                        </h3>
-                        <span
-                          className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded"
-                          style={{ color: railColor, backgroundColor: `${railColor}1A` }}
-                        >
-                          {booking.status}
-                        </span>
+                <div className="p-6 flex-grow">
+                  {booking.eventId ? (
+                    <>
+                      <div className="flex justify-between items-start gap-3 mb-4">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div
+                            className="w-9 h-9 rounded-lg flex items-center justify-center text-sm font-bold uppercase shrink-0"
+                            style={{
+                              background: "linear-gradient(135deg, rgba(34,211,238,0.2), rgba(139,92,246,0.2))",
+                              color: "#E5E7EB",
+                            }}
+                          >
+                            {booking.eventId.title?.charAt(0)}
+                          </div>
+                          <h3
+                            className="text-base font-semibold truncate"
+                            style={{ fontFamily: "'Sora', sans-serif" }}
+                          >
+                            {booking.eventId.title}
+                          </h3>
+                        </div>
                       </div>
-                      <div
-                        className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500"
-                        style={{ fontFamily: "'Space Mono', monospace" }}
-                      >
-                        <span>
-                          {booking.eventId.date
-                            ? new Date(booking.eventId.date).toLocaleDateString()
-                            : "N/A"}
+
+                      <div className="flex items-center gap-2 mb-4">
+                        <GlowDot color={s.glow} />
+                        <span
+                          className="text-xs font-semibold uppercase tracking-wider"
+                          style={{ color: s.glow }}
+                        >
+                          {s.label}
                         </span>
-                        <span>
-                          {booking.amount === 0 ? "Free" : `₹${booking.amount}`}
-                        </span>
-                        <span>
-                          requested{" "}
-                          {booking.bookedAt
-                            ? new Date(booking.bookedAt).toLocaleDateString()
-                            : "N/A"}
-                        </span>
+
                         {booking.status !== "cancelled" && (
                           <span
-                            className="uppercase"
+                            className="ml-auto text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full"
                             style={{
-                              color:
-                                booking.paymentStatus === "paid" ? "#2F7D6B" : "#9A9A9A",
+                              backgroundColor: "rgba(255,255,255,0.06)",
+                              color: booking.paymentStatus === "paid" ? "#22D3EE" : "#9CA3AF",
                             }}
                           >
                             {booking.paymentStatus?.replace("_", " ")}
                           </span>
                         )}
                       </div>
-                    </div>
 
-                    <div className="flex items-center gap-4 shrink-0">
-                      {booking.status !== "cancelled" ? (
-                        <>
-                          <Link
-                            to={`/events/${booking.eventId._id}`}
-                            className="text-sm font-semibold hover:underline whitespace-nowrap"
-                            style={{ color: "#23262B" }}
-                          >
-                            View Event
-                          </Link>
-                          <button
-                            onClick={() => cancelBooking(booking._id)}
-                            className="flex items-center gap-1.5 text-sm font-medium transition hover:opacity-70 whitespace-nowrap"
-                            style={{ color: "#B5493F" }}
-                          >
-                            <FaTimesCircle />
-                            Cancel
-                          </button>
-                        </>
-                      ) : (
-                        <span className="text-sm italic text-gray-400 whitespace-nowrap">
-                          Cancelled
-                        </span>
-                      )}
+                      <div className="space-y-2 text-sm" style={{ color: "#9CA3AF" }}>
+                        <p className="flex justify-between">
+                          <span>Date</span>
+                          <span style={{ color: "#E5E7EB", fontVariantNumeric: "tabular-nums" }}>
+                            {booking.eventId.date
+                              ? new Date(booking.eventId.date).toLocaleDateString()
+                              : "N/A"}
+                          </span>
+                        </p>
+
+                        <p className="flex justify-between">
+                          <span>Amount</span>
+                          <span style={{ color: "#E5E7EB", fontVariantNumeric: "tabular-nums" }}>
+                            {booking.amount === 0 ? "Free" : `₹${booking.amount}`}
+                          </span>
+                        </p>
+
+                        <p className="flex justify-between">
+                          <span>Requested</span>
+                          <span style={{ color: "#E5E7EB", fontVariantNumeric: "tabular-nums" }}>
+                            {booking.bookedAt
+                              ? new Date(booking.bookedAt).toLocaleDateString()
+                              : "N/A"}
+                          </span>
+                        </p>
+                      </div>
+                    </>
+                  ) : (
+                    <p className="italic" style={{ color: "#FB7185" }}>
+                      Event details unavailable.
+                    </p>
+                  )}
+                </div>
+
+                <div
+                  className="p-4 flex justify-between items-center"
+                  style={{
+                    backgroundColor: "rgba(255,255,255,0.02)",
+                    borderTop: "1px solid rgba(255,255,255,0.06)",
+                  }}
+                >
+                  {booking.eventId && booking.status !== "cancelled" ? (
+                    <>
+                      <Link
+                        to={`/events/${booking.eventId._id}`}
+                        className="font-semibold text-sm hover:underline"
+                        style={{ color: "#22D3EE" }}
+                      >
+                        View Event
+                      </Link>
+
+                      <button
+                        onClick={() => cancelBooking(booking._id)}
+                        className="flex items-center gap-1.5 text-sm font-medium transition hover:opacity-80"
+                        style={{ color: "#FB7185" }}
+                      >
+                        <FaTimesCircle />
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <div className="w-full text-center text-sm italic" style={{ color: "#6B7280" }}>
+                      Booking Cancelled
                     </div>
-                  </div>
-                ) : (
-                  <p className="italic flex-1" style={{ color: "#B5493F" }}>
-                    Event details unavailable.
-                  </p>
-                )}
+                  )}
+                </div>
               </div>
             );
           })}
