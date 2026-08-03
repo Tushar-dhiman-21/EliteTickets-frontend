@@ -42,7 +42,7 @@ const AdminDashboard = () => {
       ]);
       setEvents(eventsRes.data);
       setBookings(bookingsRes.data);
-    } catch {
+    } catch (error) {
       console.error("Error fetching admin data", error);
     } finally {
       setLoading(false);
@@ -75,7 +75,7 @@ const AdminDashboard = () => {
       try {
         await api.delete(`/events/${id}`);
         fetchData();
-      } catch {
+      } catch (error) {
         toast.error("Error deleting event");
       }
     }
@@ -415,7 +415,6 @@ const AdminDashboard = () => {
                         </span>
                       </p>
 
-                   
                       {booking.eventId && (
                         <p className="text-gray-700 flex items-center gap-2 mt-2 pt-2 border-t border-gray-200">
                           <span className="font-bold w-16 text-gray-500 uppercase text-xs">
@@ -432,53 +431,58 @@ const AdminDashboard = () => {
                     </div>
 
                     {/* Action buttons for admin */}
-                      {booking.status === "cancelled" && (
-  <div className="flex flex-wrap gap-2 mt-2">
+                    {/* Action buttons for admin */}
+                    {booking.status === "pending" && (
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {/* Paid booking waiting for verification */}
+                        {booking.paymentStatus === "verification_pending" && (
+                          <button
+                            onClick={() =>
+                              handleUpdateBookingStatus(
+                                booking._id,
+                                "confirmed",
+                                "paid",
+                              )
+                            }
+                            className="flex-1 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold py-2 px-4 rounded-lg transition"
+                          >
+                            ✓ Verify & Confirm
+                          </button>
+                        )}
 
-    {booking.paymentStatus === "verification_pending" && (
-      <button
-        onClick={() =>
-          handleUpdateBookingStatus(
-            booking._id,
-            "confirmed",
-            "paid"
-          )
-        }
-        className="flex-1 bg-green-50 text-green-700 hover:bg-green-600 hover:text-white border border-green-200 text-xs font-bold py-2.5 px-3 rounded-lg"
-      >
-        ✓ Verify Payment
-      </button>
-    )}
+                        {/* Free booking */}
+                        {booking.amount === 0 &&
+                          booking.status === "pending" &&
+                          booking.paymentStatus !== "paid" && (
+                            <button
+                              onClick={() =>
+                                handleUpdateBookingStatus(
+                                  booking._id,
+                                  "confirmed",
+                                  "paid",
+                                )
+                              }
+                              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded-lg transition"
+                            >
+                              ✓ Confirm Free Booking
+                            </button>
+                          )}
 
-    {booking.amount === 0 && (
-      <button
-        onClick={() =>
-          handleUpdateBookingStatus(
-            booking._id,
-            "confirmed",
-            "paid"
-          )
-        }
-        className="flex-1 bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white border border-blue-200 text-xs font-bold py-2.5 px-3 rounded-lg"
-      >
-        ✓ Confirm Free Booking
-      </button>
-    )}
-
-    <button
-      onClick={() =>
-        handleUpdateBookingStatus(
-          booking._id,
-          "cancelled"
-        )
-      }
-      className="w-20 bg-red-50 text-red-600 hover:bg-red-500 hover:text-white border border-red-200 text-xs font-bold py-2.5 px-3 rounded-lg"
-    >
-      ✕ Reject
-    </button>
-
-  </div>
-)}
+                        {/* Reject booking */}
+                        <button
+                          onClick={() =>
+                            handleUpdateBookingStatus(
+                              booking._id,
+                              "cancelled",
+                              booking.paymentStatus,
+                            )
+                          }
+                          className="bg-red-600 hover:bg-red-700 text-white text-sm font-semibold py-2 px-4 rounded-lg transition"
+                        >
+                          ✕ Reject
+                        </button>
+                      </div>
+                    )}
                   </li>
                 ))
               )}
