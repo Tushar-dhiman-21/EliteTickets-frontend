@@ -13,19 +13,19 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-gray-900 shadow-lg">
+    <nav className="bg-Linear-to-r from-blue-700 via-indigo-700 to-purple-700 shadow-lg">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center py-4 gap-4">
           <Link
             to="/"
-            className="text-white text-2xl font-bold flex items-center gap-2"
+            className="text-white text-2xl font-bold flex items-center gap-2  hover:text-blue-100 transition"
           >
             <FaTicketAlt /> EliteTickets
           </Link>
           <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
             <Link
               to="/"
-              className="text-gray-200 hover:text-white transition cursor-pointer"
+              className="text-indigo-100 hover:text-white transition"
             >
               Events
             </Link>
@@ -33,13 +33,13 @@ const Navbar = () => {
               <>
                 <Link
                   to={user.role === "admin" ? "/admin" : "/dashboard"}
-                  className="text-gray-200 hover:text-white transition"
+                  className="text-indigo-100 hover:text-white transition"
                 >
                   Dashboard
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="bg-gray-700 hover:bg-black text-white px-4 py-2 rounded-md transition"
+                  className="bg-gray-700 hover:bg-indigo-800 text-white px-4 py-2 rounded-md transition"
                 >
                   Logout
                 </button>
@@ -48,13 +48,13 @@ const Navbar = () => {
               <>
                 <Link
                   to="/login"
-                  className="text-gray-200 hover:text-white transition"
+                  className="text-indigo-100 hover:text-white transition"
                 >
                   Login
                 </Link>
                 <Link
                   to="/register"
-                  className="bg-white text-gray-900 hover:bg-gray-100 px-4 py-2 rounded-md font-semibold transition"
+                  className="bg-white text-indigo-600 hover:bg-indigo-50 px-4 py-2 rounded-md font-semibold transition"
                 >
                   Sign Up
                 </Link>
