@@ -13,33 +13,44 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-indigo-600 shadow-lg">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row justify-between items-center py-4 gap-4">
+    <div className="bg-white border-b border-slate-200 shadow-sm">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="min-h-16 flex flex-wrap items-center justify-between gap-4 py-3">
+
+          {/* Logo */}
           <Link
             to="/"
-            className="text-white text-2xl font-bold flex items-center gap-2  hover:text-blue-100 transition"
+            className="text-slate-900 text-2xl font-bold flex items-center gap-2"
           >
-            <FaTicketAlt /> EliteTickets
+            <FaTicketAlt className="text-blue-600" />
+
+            <span>
+              Elite<span className="text-blue-600">Tickets</span>
+            </span>
           </Link>
+
+          {/* Navigation */}
           <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
+
             <Link
-              to="/"
-              className="text-indigo-100 hover:text-white transition"
+              to="/home"
+              className="text-slate-600 hover:text-blue-600 transition font-medium"
             >
               Events
             </Link>
+
             {user ? (
               <>
                 <Link
                   to={user.role === "admin" ? "/admin" : "/dashboard"}
-                  className="text-indigo-100 hover:text-white transition"
+                  className="text-slate-600 hover:text-blue-600 transition font-medium"
                 >
                   Dashboard
                 </Link>
+
                 <button
                   onClick={handleLogout}
-                  className="bg-gray-700 hover:bg-indigo-800 text-white px-4 py-2 rounded-md transition"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition font-semibold shadow-sm"
                 >
                   Logout
                 </button>
@@ -48,22 +59,24 @@ const Navbar = () => {
               <>
                 <Link
                   to="/login"
-                  className="text-indigo-100 hover:text-white transition"
+                  className="text-slate-600 hover:text-blue-600 transition font-medium"
                 >
                   Login
                 </Link>
+
                 <Link
                   to="/register"
-                  className="bg-white text-indigo-600 hover:bg-indigo-50 px-4 py-2 rounded-md font-semibold transition"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition shadow-sm"
                 >
                   Sign Up
                 </Link>
               </>
             )}
+
           </div>
         </div>
       </div>
-    </nav>
+    </div>
   );
 };
 
