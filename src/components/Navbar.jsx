@@ -13,7 +13,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-Linear-to-r from-blue-700 via-indigo-700 to-purple-700 shadow-lg">
+    <nav className="bg-indigo-600 shadow-lg">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center py-4 gap-4">
           <Link
