@@ -1,17 +1,17 @@
 import React from 'react'
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
-import EventDetails from "./pages/EventDetails";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import PaymentFailed from "./pages/PaymentFailed";
-import AdminDashboard from "./pages/AdminDashboard";
-import PaymentSuccess from "./pages/PaymentSucess";
-import UserDashboard from "./pages/UserDashboard";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
-import Payment from "./pages/Payment";
+import Navbar from "./Navbar";
+import Home from "../pages/Home";
+import EventDetails from "../pages/EventDetails";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
+import PaymentFailed from "../pages/PaymentFailed";
+import AdminDashboard from "../pages/AdminDashboard";
+import PaymentSuccess from "../pages/PaymentSucess";
+import UserDashboard from "../pages/UserDashboard";
+import ForgotPassword from "../pages/ForgotPassword";
+import ResetPassword from "../pages/ResetPassword";
+import Payment from "../pages/Payment";
 
 const Layout = () => {
   return (
