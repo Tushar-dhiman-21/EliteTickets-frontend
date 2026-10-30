@@ -7,7 +7,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import PaymentFailed from "./pages/PaymentFailed";
 import AdminDashboard from "./pages/AdminDashboard";
-import PaymentSuccess from "./pages/PaymentSucess";
+import PaymentSuccess from "./pages/PaymentSuccess";
 import UserDashboard from "./pages/UserDashboard";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";

@@ -1,16 +1,17 @@
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://elite-tickets-backend.vercel.app/api",
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:6900/api",
 });
 
-
 api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
 });
 
 export default api;
